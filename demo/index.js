@@ -1,4 +1,4 @@
-import MiniChart from '../src/minichart'
+import MiniChart from '../lib/minichart'
 
 window.onload = function () {
   let btn = document.getElementById('btn')

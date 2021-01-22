@@ -1,11 +1,17 @@
 {
-  "name": "minicharts",
+  "name": "minichart",
   "version": "0.0.1",
   "description": "A mini chart",
-  "main": "index.js",
+  "main": "src/minichart.js",
   "scripts": {
-    "start": "webpack serve --open"
+    "start": "webpack serve --open --mode=development",
+    "build": "webpack --mode=production"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeff-fe/minichart.git"
+  },
+  "homepage": "https://github.com/jeff-fe/minichart.git",
   "keywords": [
     "mini",
     "chart"
