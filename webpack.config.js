@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isDev = argv.mode === 'development'
-  const entryPath = isDev ? './demo/index.js' : './src/minichart.js'
+  const entryPath = isDev ? './demo/index.js' : './src/smallchart.js'
   const plugins = isDev ? [
     new HtmlWebpackPlugin({
       template: './demo/index.html'
@@ -20,9 +20,9 @@ module.exports = (env, argv) => {
     },
     plugins: plugins,
     output: {
-      filename: 'minichart.js',
+      filename: 'smallchart.js',
       path: path.resolve(__dirname, 'lib'),
-      library: 'minichart',
+      library: 'smallchart',
       libraryTarget: 'umd'
     }
   }

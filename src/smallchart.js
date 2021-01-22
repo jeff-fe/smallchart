@@ -1,6 +1,6 @@
 import {dataToPoints, createNs, appendPolyline, pointsToPath, appendPath} from './utils/util'
 
-class MiniChart {
+class SmallChart {
   constructor(dom) {
     this.dom = dom
     this.width = ''
@@ -12,7 +12,7 @@ class MiniChart {
   }
 
   static init(dom) {
-    return new MiniChart(dom)
+    return new SmallChart(dom)
   }
 
   dealSeries(series) {
@@ -86,4 +86,4 @@ class MiniChart {
   }
 }
 
-export default MiniChart
+export default SmallChart

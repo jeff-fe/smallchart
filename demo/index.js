@@ -1,9 +1,9 @@
-import MiniChart from '../src/minichart'
+import SmallChart from '../src/smallchart'
 
 window.onload = function () {
   let btn = document.getElementById('btn')
   let box = document.getElementById('box')
-  let m = MiniChart.init(box)
+  let m = SmallChart.init(box)
   let op = {
     // width: 450,
     // height: 200,
