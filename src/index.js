@@ -14,7 +14,8 @@ window.onload = function () {
       type: 'line',
       fill: '#8956FF',
       // strokeWidth: 10,
-      stroke: '#8956FF'
+      stroke: '#8956FF',
+      // smooth: true
     }]
   }
   m.setOption(op)

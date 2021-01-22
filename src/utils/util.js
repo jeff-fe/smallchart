@@ -12,7 +12,7 @@ export function createNs(type) {
 
 export function appendPolyline(parent, i) {
   let path = createNs('polyline')
-  path.setAttribute('points', i.points)
+  path.setAttribute('points', i.pointsPath)
   path.setAttribute('stroke', i.stroke || 'slategray')
   path.setAttribute('stroke-width', i.strokeWidth || 2)
   path.setAttribute('stroke-dasharray', i.strokeDasharray || 'none')
@@ -20,7 +20,24 @@ export function appendPolyline(parent, i) {
   parent.appendChild(path)
   if (i.fill) {
     let fillPath = createNs('polyline')
-    fillPath.setAttribute('points', i.closePoints)
+    fillPath.setAttribute('points', i.closePointsPath)
+    fillPath.setAttribute('fill', i.fill)
+    fillPath.setAttribute('fill-opacity', i.fillOpacity || '.2')
+    parent.insertBefore(fillPath, path)
+  }
+}
+
+export function appendPath(parent, i) {
+  let path = createNs('path')
+  path.setAttribute('d', `M${i.pointsPath.join(' ')}`)
+  path.setAttribute('stroke', i.stroke || 'slategray')
+  path.setAttribute('stroke-width', i.strokeWidth || 2)
+  path.setAttribute('stroke-dasharray', i.strokeDasharray || 'none')
+  path.setAttribute('fill', 'none')
+  parent.appendChild(path)
+  if (i.fill) {
+    let fillPath = createNs('path')
+    fillPath.setAttribute('d', `M${i.closePointsPath.join(' ')}`)
     fillPath.setAttribute('fill', i.fill)
     fillPath.setAttribute('fill-opacity', i.fillOpacity || '.2')
     parent.insertBefore(fillPath, path)
@@ -51,4 +68,36 @@ export function dataToPoints(
     x: i * w + margin,
     y: (max === min ? 1 : (max - d)) * h + margin
   }))
+}
+
+export function pointsToPath(pointArr, smooth) {
+  let pointsPath
+  if (smooth) {
+    let prev
+
+    function curve(p) {
+      let res
+      if (!prev) {
+        res = [p.x, p.y]
+      } else {
+        const len = (p.x - prev.x) * 0.5
+        res = [
+          'C',
+          prev.x + len,
+          prev.y,
+          p.x - len,
+          p.y,
+          p.x,
+          p.y
+        ]
+      }
+      prev = p
+      return res
+    }
+
+    pointsPath = pointArr.map(p => curve(p)).reduce((a, b) => a.concat(b))
+  } else {
+    pointsPath = pointArr.map(p => [p.x, p.y]).reduce((a, b) => a.concat(b))
+  }
+  return pointsPath
 }

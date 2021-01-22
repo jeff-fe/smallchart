@@ -1,4 +1,4 @@
-import {dataToPoints, createNs, appendPolyline} from './utils/util'
+import {dataToPoints, createNs, appendPolyline, pointsToPath, appendPath} from './utils/util'
 
 class MiniChart {
   constructor(dom) {
@@ -8,6 +8,7 @@ class MiniChart {
     this.svg = ''
     this.max = ''
     this.min = ''
+    this.margin = ''
   }
 
   static init(dom) {
@@ -19,8 +20,7 @@ class MiniChart {
       const {
         data,
         limit = data.length,
-        margin = 5,
-        ...others
+        smooth  // 是否为平滑曲线
       } = item
       const pointArr = dataToPoints({
         data,
@@ -29,18 +29,18 @@ class MiniChart {
         height: this.height,
         max: this.max,
         min: this.min,
-        margin
+        margin: this.margin
       })
       // 展示的路径
-      const points = pointArr.map(p => [p.x, p.y]).reduce((a, b) => a.concat(b))
+      let pointsPath = pointsToPath(pointArr, smooth)
       // 闭合路径作为展示阴影
-      const closePoints = points.concat([
-        pointArr[pointArr.length - 1].x,
-        this.height - margin,
-        margin,
-        this.height - margin,
+      const closePointsPath = pointsPath.concat([
+        smooth ? `L ${pointArr[pointArr.length - 1].x}` : pointArr[pointArr.length - 1].x,
+        this.height - this.margin,
+        this.margin,
+        this.height - this.margin,
       ])
-      return {...others, points, closePoints}
+      return {...item, pointsPath, closePointsPath}
     })
   }
 
@@ -50,7 +50,7 @@ class MiniChart {
     data.forEach((i) => {
       switch (i.type) {
         case 'line':
-          appendPolyline(g, i)
+          i.smooth ? appendPath(g, i) : appendPolyline(g, i)
           break
         case 'bar':
           // appendPolyline(g, i)
@@ -64,11 +64,12 @@ class MiniChart {
   }
 
   setOption(option = {}) {
-    let {width = 100, height = 30, series, max, min} = option
+    let {width = 100, height = 30, series, max, min, margin = 5} = option
     this.width = width
     this.height = height
     this.max = max
     this.min = min
+    this.margin = margin
     if (!series) {
       throw new Error('Please option must have series!')
     }
