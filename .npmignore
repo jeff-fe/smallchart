@@ -1,0 +1,9 @@
+demo/*
+node_modules/
+src/*
+webpack.config.js
+.editorconfig
+.gitignore
+.npmignore
+.DS_Store
+.idea/*
