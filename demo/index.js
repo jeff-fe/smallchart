@@ -1,28 +1,36 @@
 import SmallChart from '../src/smallchart'
 
 window.onload = function () {
-  let btn = document.getElementById('btn')
-  let box = document.getElementById('box')
-  let m = SmallChart.init(box)
-  let op = {
-    // width: 450,
-    // height: 200,
-    // max: 1500,
-    // min:700,
+  let line1 = SmallChart.init(document.getElementById('line1'))
+  line1.setOption({
     series: [{
       data: [820, 932, 901, 934, 1290, 1330, 1320],
       type: 'line',
       fill: '#8956FF',
-      // strokeWidth: 10,
-      stroke: '#8956FF',
-      // smooth: true
+      stroke: '#8956FF'
     }]
-  }
-  m.setOption(op)
-  console.log(666)
-  btn.onclick = function () {
-    op.series[0].data.push(Math.floor(Math.random() * 800))
-    m.setOption(op)
-  }
+  })
+  let line2 = SmallChart.init(document.getElementById('line2'))
+  line2.setOption({
+    // width: 200,
+    // height: 100,
+    series: [{
+      data: [820, 932, 901, 934, 1290, 1330, 1320],
+      type: 'line',
+      fill: '#8956FF',
+      stroke: '#8956FF',
+      strokeWidth: 4,
+      // strokeDasharray: 5,
+      smooth: true
+    }]
+  })
+  let bar1 = SmallChart.init(document.getElementById('bar1'))
+  bar1.setOption({
+    series: [{
+      data: [820, 932, 901, 934, 1290, 1330, 1320],
+      type: 'bar',
+      fill: '#8956FF'
+    }]
+  })
 }
 
