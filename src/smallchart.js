@@ -1,4 +1,4 @@
-import {dataToPoints, createNs, appendPolyline, pointsToPath, appendPath} from './utils/util'
+import {dataToPoints, createNs, dealLineData, dealBarData} from './utils/util'
 
 class SmallChart {
   constructor(dom) {
@@ -19,8 +19,7 @@ class SmallChart {
     return series.map((item) => {
       const {
         data,
-        limit = data.length,
-        smooth  // 是否为平滑曲线
+        limit = data.length
       } = item
       const pointArr = dataToPoints({
         data,
@@ -31,16 +30,7 @@ class SmallChart {
         min: this.min,
         margin: this.margin
       })
-      // 展示的路径
-      let pointsPath = pointsToPath(pointArr, smooth)
-      // 闭合路径作为展示阴影
-      const closePointsPath = pointsPath.concat([
-        smooth ? `L ${pointArr[pointArr.length - 1].x}` : pointArr[pointArr.length - 1].x,
-        this.height - this.margin,
-        this.margin,
-        this.height - this.margin,
-      ])
-      return {...item, pointsPath, closePointsPath}
+      return {...item, limit, pointArr}
     })
   }
 
@@ -50,10 +40,10 @@ class SmallChart {
     data.forEach((i) => {
       switch (i.type) {
         case 'line':
-          i.smooth ? appendPath(g, i) : appendPolyline(g, i)
+          dealLineData(i, this, g)
           break
         case 'bar':
-          // appendPolyline(g, i)
+          dealBarData(i, this, g)
           break
         case 'pie':
           // appendPolyline(g, i)
@@ -64,7 +54,7 @@ class SmallChart {
   }
 
   setOption(option = {}) {
-    let {width = 100, height = 30, series, max, min, margin = 5} = option
+    let {width = 100, height = 30, series, max, min, margin = 2} = option
     this.width = width
     this.height = height
     this.max = max

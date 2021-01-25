@@ -44,6 +44,17 @@ export function appendPath(parent, i) {
   }
 }
 
+export function appendRect(parent, i, {x, y, width, height, num}) {
+  let rect = createNs('rect')
+  rect.setAttribute('x', x)
+  rect.setAttribute('y', y)
+  rect.setAttribute('width', width)
+  rect.setAttribute('height', height)
+  rect.setAttribute('num', num)
+  rect.setAttribute('fill', i.fill || '#409EFF')
+  parent.appendChild(rect)
+}
+
 export function dataToPoints(
   {
     data,
@@ -100,4 +111,41 @@ export function pointsToPath(pointArr, smooth) {
     pointsPath = pointArr.map(p => [p.x, p.y]).reduce((a, b) => a.concat(b))
   }
   return pointsPath
+}
+
+export function dealLineData(item, _this, g) {
+  let {pointArr, smooth} = item
+  // 展示的路径
+  let pointsPath = pointsToPath(pointArr, smooth)
+  // 闭合路径作为展示阴影
+  const closePointsPath = pointsPath.concat([
+    smooth ? `L ${pointArr[pointArr.length - 1].x}` : pointArr[pointArr.length - 1].x,
+    _this.height - _this.margin,
+    _this.margin,
+    _this.height - _this.margin,
+  ])
+  let d = {...item, pointsPath, closePointsPath}
+  smooth ? appendPath(g, d) : appendPolyline(g, d)
+}
+
+export function dealBarData(item, _this, g) {
+  let {pointArr, data, limit} = item
+  const marginWidth = _this.margin ? 2 * _this.margin : 0
+  const noLimit = data.length === limit
+  const barWidth = noLimit
+    ? ((_this.width - limit * marginWidth) / limit)
+    : (pointArr && pointArr.length >= 2 ? Math.max(0, pointArr[1].x - pointArr[0].x - marginWidth) : 0)
+
+  if (barWidth < 1) {
+    throw new Error('Too much data, please enlarge the width or reduce the margin')
+  }
+
+  pointArr.forEach((p, i) => {
+    const x = noLimit ? Math.ceil((barWidth + marginWidth) * i + _this.margin) : Math.ceil(p.x * i)
+    const y = Math.ceil(p.y)
+    const width = Math.ceil(barWidth)
+    const height = Math.ceil(Math.max(0, _this.height - p.y))
+    const num = data[i]
+    appendRect(g, item, {x, y, width, height, num})
+  })
 }
