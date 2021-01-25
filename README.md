@@ -1,5 +1,7 @@
 # smallchart
 
+## [Demo](https://jeff-fe.github.io/smallchart/)
+
 ## Installing
 
 Using npm:
