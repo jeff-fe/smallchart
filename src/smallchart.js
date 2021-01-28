@@ -1,4 +1,4 @@
-import {dataToPoints, createNs, dealLineData, dealBarData} from './utils/util'
+import {dataToPoints, createNs, dealLineData, dealBarData, dealMarkLine} from './utils/util'
 
 class SmallChart {
   constructor(dom) {
@@ -48,6 +48,9 @@ class SmallChart {
         case 'pie':
           // appendPolyline(g, i)
           break
+      }
+      if (i.markLine && i.markLine.type) {
+        dealMarkLine(i, g)
       }
     })
     return g

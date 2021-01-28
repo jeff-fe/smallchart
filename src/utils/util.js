@@ -6,6 +6,14 @@ export function arrayMax(data) {
   return Math.max.apply(Math, data)
 }
 
+export function median(data) {
+  return data.sort((a, b) => a - b)[Math.floor(data.length / 2)]
+}
+
+export function average(data) {
+  return data.reduce((a, b) => a + b) / data.length
+}
+
 export function createNs(type) {
   return document.createElementNS("http://www.w3.org/2000/svg", type)
 }
@@ -148,4 +156,45 @@ export function dealBarData(item, _this, g) {
     const num = data[i]
     appendRect(g, item, {x, y, width, height, num})
   })
+}
+
+export function dealMarkLine(item, g) {
+  const {markLine, pointArr} = item
+  /**
+   * type 可输入的值
+   *  min 最小值
+   *  max 最大值
+   *  average 平均值
+   *  median 中位数
+   */
+
+  let {type = 'average', stroke = '#d14', strokeOpacity = 1, strokeDasharray = '2,2'} = markLine
+  const yPoints = pointArr.map(p => p.y)
+  let y = ''
+
+  switch (type) {
+    case 'min':
+      y = arrayMax(yPoints)
+      break
+    case 'max':
+      y = arrayMin(yPoints)
+      break
+    case 'average':
+      y = average(yPoints)
+      break
+    case 'median':
+      y = median(yPoints)
+      break
+
+  }
+  let rect = createNs('line')
+  rect.setAttribute('shape-rendering', 'crispEdges')
+  rect.setAttribute('stroke', stroke)
+  rect.setAttribute('stroke-opacity', strokeOpacity)
+  rect.setAttribute('stroke-dasharray', strokeDasharray)
+  rect.setAttribute('x1', pointArr[0].x)
+  rect.setAttribute('y1', y)
+  rect.setAttribute('x2', pointArr[pointArr.length - 1].x)
+  rect.setAttribute('y2', y)
+  g.appendChild(rect)
 }

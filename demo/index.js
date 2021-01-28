@@ -32,5 +32,21 @@ window.onload = function () {
       fill: '#8956FF'
     }]
   })
+
+  let line3 = SmallChart.init(document.getElementById('line3'))
+  line3.setOption({
+    series: [{
+      data: [820, 932, 901, 934, 1290, 1330, 1320],
+      type: 'line',
+      fill: '#8956FF',
+      stroke: '#8956FF',
+      markLine: {
+        type: 'average',
+        stroke: '#d14',
+        strokeOpacity: 1,
+        strokeDasharray: '2, 2'
+      }
+    }]
+  })
 }
 
