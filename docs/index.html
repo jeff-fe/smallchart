@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SmallChart</title></head>
-<body><h1>SmallChart</h1>
+<body><h1><a target="_blank" href="https://github.com/jeff-fe/smallchart">SmallChart</a></h1>
 <h3>demo</h3>
 <div>
     <div id="line1"></div>
@@ -52,6 +52,28 @@
           data: [820, 932, 901, 934, 1290, 1330, 1320],
           type: 'bar',
           fill: '#8956FF'
+        }]
+      })
+    </code>
+    </pre>
+</div>
+<div>
+    <div id="line3"></div>
+    <pre>
+    <code>
+      let line3 = SmallChart.init(document.getElementById('line3'))
+      line3.setOption({
+        series: [{
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: 'line',
+          fill: '#8956FF',
+          stroke: '#8956FF',
+          markLine: {
+            type: 'average',
+            stroke: '#d14',
+            strokeOpacity: 1,
+            strokeDasharray: '2, 2'
+          }
         }]
       })
     </code>
